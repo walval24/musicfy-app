@@ -1,6 +1,8 @@
 import axios from "axios";
 import useSWR from "swr";
-
+import Table from 'react-bootstrap/Table';
+import SongRow from "./SongRow";
+import { Outlet } from "react-router-dom";
 
 const Songs = () => {
 
@@ -8,14 +10,29 @@ const Songs = () => {
         return axios.get(url).then((response) => response.data);
     }
 
-    const { songs, error } = useSWR("http://localhost:3432/songs", fetcher);
+    const { data, error } = useSWR("http://localhost:3432/songs", fetcher);
 
-    if (songs) {
+    if (data) {
 
         return (
             <div className="container">
+                <Outlet />
                 <h4>Elenco Brani</h4>
-
+                <Table responsive>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Titolo</th>
+                            <th>Genere</th>
+                            <th>Durata</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    {data.map(song => (
+                        <SongRow key={song.id} song={song} />
+                    ))}
+                </tbody>
+                </Table>
             </div>
         );
     }
