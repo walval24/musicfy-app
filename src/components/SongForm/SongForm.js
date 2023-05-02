@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
-import axios from "axios";
-import useSWR from "swr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGet } from "../_Hooks/Customs";
+import FetchSelect from "../FetchSelect/FetchSelect";
 
 const SongForm = () => {
 
@@ -16,9 +16,21 @@ const SongForm = () => {
         idType: 0
     })
 
-    const fetcher = (url) => axios.get(url).then(result => result.data);
 
-    const {data, error} = useSWR("http://localhost:3432/songs/" + id,fetcher);
+    const {data, error} = useGet("http://localhost:3432/songs",id);
+
+    useEffect(() => {
+        if(data){
+    setSong({
+        name: data.name,
+        duration: data.duration,
+        price: data.price,
+        publishDate: data.publishDate,
+        idArtist: data.idArtist,
+        idType: data.idType
+    });
+}
+}, [data])
 
     const handleChange = (e) => {
         setSong((prevValues) => {
@@ -42,7 +54,7 @@ const SongForm = () => {
                         </div>
                         <div className=" col-6">
                             <label className=" form-lable">Artista</label>
-                            <input className=" form-control form-control-sm" />
+                            <FetchSelect  className=" form-control form-control-sm" name="idArtist" value={song.idArtist} onChange={handleChange} url={"http://localhost:3432/artists"}/>
                         </div>
                         <div className=" col-4">
                             <label className=" form-lable">Data</label>
@@ -50,7 +62,7 @@ const SongForm = () => {
                         </div>
                         <div className=" col-4">
                             <label className=" form-lable">Genere</label>
-                            <input className=" form-control form-control-sm" />
+                            <FetchSelect  className=" form-control form-control-sm" name="idType" value={song.idType} onChange={handleChange} url={"http://localhost:3432/types"}/>
                         </div>
                         <div className=" col-2">
                             <label className=" form-lable">Durata</label>

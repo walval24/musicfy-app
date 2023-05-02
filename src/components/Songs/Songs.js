@@ -1,16 +1,12 @@
-import axios from "axios";
-import useSWR from "swr";
+
 import Table from 'react-bootstrap/Table';
 import SongRow from "./SongRow";
 import { Outlet } from "react-router-dom";
+import { useGet } from "../_Hooks/Customs";
 
 const Songs = () => {
 
-    const fetcher = (url) => {
-        return axios.get(url).then((response) => response.data);
-    }
-
-    const { data, error } = useSWR("http://localhost:3432/songs", fetcher);
+    const {data, error, isLoading} = useGet("http://localhost:3432/songs");
 
     if (data) {
 
