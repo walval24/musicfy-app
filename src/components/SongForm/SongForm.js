@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGet } from "../_Hooks/Customs";
+import { useGet, usePut } from "../_Hooks/Customs";
 import FetchSelect from "../FetchSelect/FetchSelect";
 
 const SongForm = () => {
@@ -11,7 +11,7 @@ const SongForm = () => {
         name: "",
         duration: 0,
         price: 0.0,
-        publishDate: null,
+        publishDate: "",
         idArtist: 0,
         idType: 0
     })
@@ -19,13 +19,15 @@ const SongForm = () => {
 
     const {data, error} = useGet("http://localhost:3432/songs",id);
 
+    const submitData = usePut("http://localhost:3432/songs",id);
+
     useEffect(() => {
         if(data){
     setSong({
         name: data.name,
         duration: data.duration,
         price: data.price,
-        publishDate: data.publishDate,
+        publishDate: data.publishDate ? data.publishDate : "",
         idArtist: data.idArtist,
         idType: data.idType
     });
@@ -41,13 +43,20 @@ const SongForm = () => {
         });
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        submitData(song);
+
+    }
+
     return (
 
         <>
             <div className="m-2 p-2 border">
              
                     <h5>Modifica Canzone</h5>
-                    <form className=" row">
+                    <form className=" row" onSubmit={handleSubmit}>
                         <div className=" col-6">
                             <label className=" form-lable">Titolo</label>
                             <input className=" form-control form-control-sm" name="name" value={song.name} onChange={handleChange}/>
