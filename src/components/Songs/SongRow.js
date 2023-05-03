@@ -2,10 +2,10 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { useGet } from "../_Hooks/Customs";
+import { useGet,useDelete } from "../_Hooks/Customs";
 
 
-const SongRow = ({song})=> {
+const SongRow = ({song, deleteSuccess})=> {
 
 
 
@@ -14,7 +14,13 @@ const SongRow = ({song})=> {
 
     const {data: artist, error: artistError} = useGet("http://localhost:3432/artists", song.idArtist );
 
-    const performDelete = () => {}
+    const deleteData = useDelete("http://localhost:3432/songs", song.id);
+
+    const performDelete = () => {
+       deleteData(deleteSuccess);
+        
+    }
+  
 
     return (
         <tr>

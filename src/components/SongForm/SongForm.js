@@ -1,6 +1,6 @@
 import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGet, usePut } from "../_Hooks/Customs";
+import { useGet, usePost, usePut } from "../_Hooks/Customs";
 import FetchSelect from "../FetchSelect/FetchSelect";
 import Alert from "../Alert/Alert";
 
@@ -22,7 +22,9 @@ const SongForm = () => {
 
     const {data, error} = useGet("http://localhost:3432/songs",id);
 
-    const submitData = usePut("http://localhost:3432/songs",id); // usePut restituiesce la funzione per il salvataggio dei dati
+    const putData = usePut("http://localhost:3432/songs",id); // usePut restituiesce la funzione per il salvataggio dei dati
+
+    const postData = usePost("http://localhost:3432/songs"); // // usePost restituiesce la funzione per la cereazione dato dei dati
 
     const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ const SongForm = () => {
 
 
     useEffect(() => {
-        if(data){
+        if(data && id == !undefined){
     setSong({
         name: data.name,
         duration: data.duration,
@@ -54,7 +56,12 @@ const SongForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
             // Codice per Salvataggio
-        submitData(song, submitSuccess); // data -> song; successFn -> submitSuccess ( vedi Customs.js / usePut)
+        if(id > 0) {
+            putData(song, submitSuccess); // data -> song; successFn -> submitSuccess ( vedi Customs.js / usePut)
+        } 
+        else   {
+       postData(song,submitSuccess);
+        }
         
     }
 
