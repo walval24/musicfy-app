@@ -1,7 +1,8 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useGet, usePut } from "../_Hooks/Customs";
 import FetchSelect from "../FetchSelect/FetchSelect";
+import Alert from "../Alert/Alert";
 
 const SongForm = () => {
 
@@ -16,10 +17,17 @@ const SongForm = () => {
         idType: 0
     })
 
+    const [alertShow, setAlertShow] = useState(false); // Variabile di stato per gestire la visualizzazione dell'alert
+    const [alertMessage, setAlertMessage] = useState(""); //  // Variabile di stato per gestire il messaggio dell'alert
 
     const {data, error} = useGet("http://localhost:3432/songs",id);
 
-    const submitData = usePut("http://localhost:3432/songs",id);
+    const submitData = usePut("http://localhost:3432/songs",id); // usePut restituiesce la funzione per il salvataggio dei dati
+
+    const navigate = useNavigate();
+
+    const {mutate} = useOutletContext(); // useOutletContext permette di reperire le proprietà e o funzioni passate al context dall'outlet (vedi songs.js)
+
 
     useEffect(() => {
         if(data){
@@ -45,9 +53,20 @@ const SongForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+            // Codice per Salvataggio
+        submitData(song, submitSuccess); // data -> song; successFn -> submitSuccess ( vedi Customs.js / usePut)
+        
+    }
 
-        submitData(song);
+    const submitSuccess = () => {
+        setAlertMessage("Salvataggio completato")
+        setAlertShow(true);
+    }
 
+    const alertDismiss = () => {
+        setAlertShow(false);
+        navigate("/songs", {replace: true});
+        mutate();
     }
 
     return (
@@ -67,7 +86,7 @@ const SongForm = () => {
                         </div>
                         <div className=" col-4">
                             <label className=" form-lable">Data</label>
-                            <input className=" form-control form-control-sm" name="publishDate" value={song.publishDate} onChange={handleChange}/>
+                            <input className=" form-control form-control-sm" type="date" name="publishDate" value={song.publishDate.substring(0,10)} onChange={handleChange}/>
                         </div>
                         <div className=" col-4">
                             <label className=" form-lable">Genere</label>
@@ -88,6 +107,7 @@ const SongForm = () => {
                             </div>
                         </div>
                     </form>
+                    <Alert show={alertShow} onHide={alertDismiss} message ={alertMessage} />
                 
             </div>
         </>

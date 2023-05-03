@@ -11,12 +11,13 @@ const useGet = (url, id = 0) => {
         finalUrl += ("/" + id);
     }
 
-    const {data, error} = useSWR (finalUrl, fetcher);
+    const {data, error, mutate} = useSWR (finalUrl, fetcher);
 
     return {
         data : data,
         error: error,
-        isLoading: !error && !data
+        isLoading: !error && !data,
+        mutate: mutate
 
     }
 
@@ -29,10 +30,10 @@ const usePut = (url, id) => {
 
     const finalUrl = url + "/" + id;
     // usePut restituisce una funzione da restituire in fase di submit
-    return (data) => {
+    return (data, successFn) => {    // Data -> l'oggetto con i dati da salvare; successFn -> la funzione da eseguire nel then
         axios.put(finalUrl, data).then(result => {
             if(result.data){
-                console.log(result.data); // Se il salvataggio va a buon fine il "then" effettuerà il log dei daT IA CONSOLE
+                successFn(); // Se il salvataggio va a buon fine il "then" eseguirà òa funzione successFn
             }
         });
     }
