@@ -1,12 +1,10 @@
-import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useGet, usePost, usePut } from "../_Hooks/Customs";
+import { usePost, usePut } from "../_Hooks/Customs";
 import FetchSelect from "../FetchSelect/FetchSelect";
 import Alert from "../Alert/Alert";
 
-const SongForm = () => {
-
-    const {id} = useParams();
+const SongForm = ({data = {}, mutate}) => {
 
     const [song, setSong] = useState({
         name: "",
@@ -20,19 +18,14 @@ const SongForm = () => {
     const [alertShow, setAlertShow] = useState(false); // Variabile di stato per gestire la visualizzazione dell'alert
     const [alertMessage, setAlertMessage] = useState(""); //  // Variabile di stato per gestire il messaggio dell'alert
 
-    const {data, error} = useGet("http://localhost:3432/songs",id);
-
-    const putData = usePut("http://localhost:3432/songs",id); // usePut restituiesce la funzione per il salvataggio dei dati
+    const putData = usePut("http://localhost:3432/songs",data.id); // usePut restituiesce la funzione per il salvataggio dei dati
 
     const postData = usePost("http://localhost:3432/songs"); // // usePost restituiesce la funzione per la cereazione dato dei dati
 
     const navigate = useNavigate();
 
-    const {mutate} = useOutletContext(); // useOutletContext permette di reperire le proprietà e o funzioni passate al context dall'outlet (vedi songs.js)
-
-
     useEffect(() => {
-        if(data && id == !undefined){
+        if(data.id > 0){
     setSong({
         name: data.name,
         duration: data.duration,
@@ -42,7 +35,7 @@ const SongForm = () => {
         idType: data.idType
     });
 }
-}, [data])
+}, [data.id, data.name, data.duration, data.price, data.publishDate,data.idArtist,data.idType])
 
     const handleChange = (e) => {
         setSong((prevValues) => {
@@ -56,7 +49,7 @@ const SongForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
             // Codice per Salvataggio
-        if(id > 0) {
+        if(data.id > 0) {
             putData(song, submitSuccess); // data -> song; successFn -> submitSuccess ( vedi Customs.js / usePut)
         } 
         else   {
@@ -79,9 +72,7 @@ const SongForm = () => {
     return (
 
         <>
-            <div className="m-2 p-2 border">
-             
-                    <h5>Modifica Canzone</h5>
+           
                     <form className=" row" onSubmit={handleSubmit}>
                         <div className=" col-6">
                             <label className=" form-lable">Titolo</label>
@@ -101,11 +92,11 @@ const SongForm = () => {
                         </div>
                         <div className=" col-2">
                             <label className=" form-lable">Durata</label>
-                            <input className=" form-control form-control-sm" name="duration" value={song.duration} onChange={handleChange} />
+                            <input className=" form-control form-control-sm" type="number" min ={0} name="duration" value={song.duration} onChange={handleChange} />
                         </div>
                         <div className=" col-2">
                             <label className=" form-lable">Prezzo</label>
-                            <input className=" form-control form-control-sm" name="price" value={song.price} onChange={handleChange}/>
+                            <input className=" form-control form-control-sm" type="number" min ={0} name="price" value={song.price} onChange={handleChange}/>
                         </div>
                         <div className="col-12">
                             <div className=" d-flex justify-content-around mt-3">
@@ -116,7 +107,7 @@ const SongForm = () => {
                     </form>
                     <Alert show={alertShow} onHide={alertDismiss} message ={alertMessage} />
                 
-            </div>
+            
         </>
 
     );

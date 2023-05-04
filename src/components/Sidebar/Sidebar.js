@@ -36,7 +36,10 @@ const Sidebar = () => {
                             <Link to="/" className="nav-link active" onClick={handleClose} >Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/songs" className="nav-link"  onClick={handleClose} >Brani</Link>
+                            <Link to="songs" className="nav-link"  onClick={handleClose} >Brani</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to="artists" className="nav-link"  onClick={handleClose} >Artisti</Link>
                         </li>
                     </ul>
                 </Offcanvas.Body>
