@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useGet } from "../_Hooks/Customs";
+import { useDelete, useGet } from "../_Hooks/Customs";
 import Alert from 'react-bootstrap/Alert';
 import { useState } from "react";
 
@@ -9,9 +9,14 @@ const ArtistItem = ({ artist, deleteSuccess }) => {
 
     const [showDelete, setShowDelete] = useState(false);
 
-    const { data, error } = useGet("http://localhost:3432/artists/" + artist.id + "/songs")
+    const { data: songs, error } = useGet("http://localhost:3432/artists/" + artist.id + "/songs")
 
-    const performeDelete = () => { };
+
+    const deleteData = useDelete("http://localhost:3432/artists", artist.id )
+
+    const performDelete = () => {
+        deleteData(deleteSuccess);
+     };
 
     return (
         <article className="col-12">
@@ -31,25 +36,29 @@ const ArtistItem = ({ artist, deleteSuccess }) => {
                             <Link className="btn btn-outline-info" to={"edit/" + artist.id}>
                                 Modifica
                             </Link>
-                            <button className="btn btn-outline-danger" onClick={performeDelete}>
+                            <button className="btn btn-outline-danger" onClick={()=>{setShowDelete(true)}}>
                                 Elimina
                             </button>
                         </div>
                     </div>
                     <div className="col-12">
-                        <Alert show={showDelete} variant="success">
-                            <Alert.Heading>How's it going?!</Alert.Heading>
-                            <p>
-                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
-                                lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
-                                fermentum.
+                        <Alert className="mt-2" show={showDelete} variant="danger">
+                            <Alert.Heading>Eliminare {artist.name} ? </Alert.Heading>
+                            {songs && songs.length > 0 ? 
+                            (
+                                <p>
+                                Verranno eliminate anche: {songs.length} canzoni/e . Vuoi Procedere ?
                             </p>
-                            <hr />
+
+                            )
+                            : "" }
+                            
+                            
                             <div className="d-flex justify-content-end">
-                                <button className="btn btn-outline-success">
+                                <button className="btn btn-outline-success btn-sm me-2" onClick={performDelete}>
                                     Conferma
                                 </button>
-                                <button onClick={() => setShowDelete(false)} className="btn btn-outline-danger">
+                                <button  className="btn btn-outline-danger btn-sm me-2" onClick={() => setShowDelete(false)}>
                                     Annulla
                                 </button>
                             </div>
