@@ -8,17 +8,19 @@ import { useGet } from "../_Hooks/Customs";
 
 const EditArtist = () => {
 
-    const {id} = useParams();
+  const { id } = useParams();
 
-    const {data,error} = useGet("http://localhost:3432/artists" , id)
+  const { data, error } = useGet("http://localhost:3432/artists", id)
 
-  return (
+  if (data) {
+    return (
 
-    <div className="container">
+      <div className="container">
         <h5>Modifica Artista</h5>
-        <ArtistForm data={data}/>
-    </div>
-  )
+        <ArtistForm data={data} />
+      </div>
+    );
+  }
 }
 
 export default EditArtist;

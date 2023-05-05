@@ -5,10 +5,11 @@ import { Outlet, Link } from "react-router-dom";
 import { useGet } from "../_Hooks/Customs";
 import { useState } from 'react';
 import Alert from '../Alert/Alert';
+import { URL_SONGS } from '../_Utils/Constants';
 
 const Songs = () => {
 
-    const { data, error, isLoading, mutate } = useGet("http://localhost:3432/songs");
+    const { data, error, isLoading, mutate } = useGet(URL_SONGS);
 
     const [alertShow, setAlertShow] = useState(false);
     const [AlertMessage, setAlertMessage] = useState("");
