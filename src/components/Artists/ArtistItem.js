@@ -37,7 +37,7 @@ const ArtistItem = ({ artist, deleteSuccess }) => {
                         </div>
                     </div>
                     <div className="col-12">
-                        <Alert show={show} variant="success">
+                        <Alert show={showDelete} variant="success">
                             <Alert.Heading>How's it going?!</Alert.Heading>
                             <p>
                                 Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
