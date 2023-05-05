@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { FloatingLabel } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { usePut, usePost } from "../_Hooks/Customs";
+import Alert from "../Alert/Alert";
+
 
 
 const ArtistForm = ({data = {}}) => {
@@ -26,7 +28,7 @@ const ArtistForm = ({data = {}}) => {
             setArtist({
                 name: data.name,
                 alias: data.alias,
-                birthDate: data.birthDate
+                birthDate: data.birthDate ? data.birthDate : ""
             })
         }
     }, [data])
@@ -67,6 +69,7 @@ const ArtistForm = ({data = {}}) => {
 
 
     return (
+        <>
         <form className="row">
             <div className="col-12">
                 <FloatingLabel controlId="txtName" label="Nome" className="my-2">
@@ -90,6 +93,8 @@ const ArtistForm = ({data = {}}) => {
                 </div>
             </div>
         </form>
+        <Alert show={alertShow} onHide={alertDismiss} message={alertMessage}/>
+        </>
     );
 }
 

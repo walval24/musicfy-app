@@ -6,6 +6,7 @@ import EditSong from "./components/SongForm/EditSong";
 import NewSong from "./components/SongForm/NewSong";
 import Artists from "./components/Artists/Artists";
 import NewArtist from "./components/ArtistForm/NewArtist";
+import EditArtist from "./components/ArtistForm/EditArtist";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           </Route>
           <Route path="artists" element={<Artists/>} />
           <Route path="artists/new" element={<NewArtist/>}/>
+          <Route path="artists/edit/:id" element={<EditArtist/>}/>
         </Route>
       </Routes>
     </Router>

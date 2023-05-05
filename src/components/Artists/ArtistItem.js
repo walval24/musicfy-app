@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
+import { useGet } from "../_Hooks/Customs";
+import Alert from 'react-bootstrap/Alert';
+import { useState } from "react";
 
 
 
+const ArtistItem = ({ artist, deleteSuccess }) => {
 
-const ArtistItem = ({ artist }) => {
+    const [showDelete, setShowDelete] = useState(false);
 
-    const performeDelete = () => {};
+    const { data, error } = useGet("http://localhost:3432/artists/" + artist.id + "/songs")
+
+    const performeDelete = () => { };
 
     return (
         <article className="col-12">
@@ -25,11 +31,32 @@ const ArtistItem = ({ artist }) => {
                             <Link className="btn btn-outline-info" to={"edit/" + artist.id}>
                                 Modifica
                             </Link>
-                            <button className="btn btn-outline-danger" onClick={performeDelete }>
+                            <button className="btn btn-outline-danger" onClick={performeDelete}>
                                 Elimina
                             </button>
                         </div>
                     </div>
+                    <div className="col-12">
+                        <Alert show={show} variant="success">
+                            <Alert.Heading>How's it going?!</Alert.Heading>
+                            <p>
+                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
+                                lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
+                                fermentum.
+                            </p>
+                            <hr />
+                            <div className="d-flex justify-content-end">
+                                <button className="btn btn-outline-success">
+                                    Conferma
+                                </button>
+                                <button onClick={() => setShowDelete(false)} className="btn btn-outline-danger">
+                                    Annulla
+                                </button>
+                            </div>
+                        </Alert>
+
+                    </div>
+
                 </div>
             </div>
 
