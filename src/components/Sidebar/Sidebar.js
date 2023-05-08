@@ -5,7 +5,7 @@ import { Navbar, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import "./Sidebar.scss"
+
 
 const Sidebar = () => {
     const [show, setShow] = useState(false);

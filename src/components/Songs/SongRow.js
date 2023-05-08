@@ -8,8 +8,7 @@ import { URL_ARTISTS,URL_SONGS,URL_TYPES } from "../_Utils/Constants";
 
 const SongRow = ({song, deleteSuccess})=> {
 
-
-
+    const base64prefix = "data:image/jpeg;base64,"
 
     const {data: type, error: typeError} = useGet(URL_TYPES, song.idType);
 
@@ -24,6 +23,7 @@ const SongRow = ({song, deleteSuccess})=> {
   
 
     return (
+        <>
         <tr>
             <td className=" align-middle">
                 <Link className="btn text-info" to={"edit/" + song.id}>
@@ -33,14 +33,17 @@ const SongRow = ({song, deleteSuccess})=> {
                     <FontAwesomeIcon icon={faTrashCan}/>
                 </button>
             </td>
+            <td className="align-middle">
+                    <img src={base64prefix + song.cover} style={{width: "100px"}}/>
+                </td>
             <td>
                <div>{song.name}</div> 
                <div className=" small">{artist ? artist.name : ""}</div> 
-            
             </td>
             <td className=" align-middle">{type ? type.name : song.idType}</td>
             <td className=" align-middle">{song.duration}</td>
         </tr>
+        </>
 
     );
 }

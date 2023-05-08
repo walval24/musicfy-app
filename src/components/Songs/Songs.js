@@ -38,6 +38,7 @@ const Songs = () => {
                     <thead>
                         <tr>
                             <th></th>
+                            <th>Cover</th>
                             <th>Titolo</th>
                             <th>Genere</th>
                             <th>Durata</th>
